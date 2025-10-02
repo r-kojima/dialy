@@ -48,6 +48,14 @@ async function hashPassword(password: string): Promise<string> {
 
 async function createAdmin() {
   try {
+    // 既存のユーザーが存在するか確認
+    const existingUserCount = await prisma.user.count()
+    if (existingUserCount > 0) {
+      console.error("\n✗ Error: An admin account already exists")
+      console.error("  Only one admin account is allowed")
+      process.exit(1)
+    }
+
     const hashedPassword = await hashPassword(password)
 
     const user = await prisma.user.create({
