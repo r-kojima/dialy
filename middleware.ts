@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { NextResponse } from "next/server"
 
 export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname
@@ -9,8 +9,9 @@ export function middleware(req: NextRequest) {
   }
 
   // セッションクッキーの存在チェック（NextAuthのデフォルトクッキー名）
-  const sessionToken = req.cookies.get("authjs.session-token") ||
-                       req.cookies.get("__Secure-authjs.session-token")
+  const sessionToken =
+    req.cookies.get("authjs.session-token") ||
+    req.cookies.get("__Secure-authjs.session-token")
 
   if (pathname.startsWith("/admin") && !sessionToken) {
     const loginUrl = new URL("/admin/login", req.url)
