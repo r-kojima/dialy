@@ -8,12 +8,6 @@ export default async function Home() {
     <div className="min-h-screen p-8 max-w-4xl mx-auto">
       <header className="mb-12">
         <h1 className="text-4xl font-bold mb-4">個人日記</h1>
-        <Link
-          href="/posts/new"
-          className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-        >
-          新しい記事を作成
-        </Link>
       </header>
 
       <main>

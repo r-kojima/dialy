@@ -104,3 +104,4 @@ Tag {
 - PostgreSQLデータベース接続情報は`.env`ファイルのDATABASE_URLで設定
 - 環境変数は`.env`ファイル (DATABASE_URL)
 - リント・フォーマットにBiomeを使用（ESLint/Prettierではない）
+- コード生成をする際は、`biome.json`の内容を考慮すること
