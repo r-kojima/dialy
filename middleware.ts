@@ -1,22 +1,24 @@
 import { NextResponse } from "next/server"
-import { auth } from "@/auth"
+import type { NextRequest } from "next/server"
 
-export default auth((req) => {
+export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname
 
-  // ログインページと登録ページは認証不要
   if (pathname === "/admin/login" || pathname === "/admin/register") {
     return NextResponse.next()
   }
 
-  // /admin配下は認証必須
-  if (pathname.startsWith("/admin") && !req.auth) {
+  // セッションクッキーの存在チェック（NextAuthのデフォルトクッキー名）
+  const sessionToken = req.cookies.get("authjs.session-token") ||
+                       req.cookies.get("__Secure-authjs.session-token")
+
+  if (pathname.startsWith("/admin") && !sessionToken) {
     const loginUrl = new URL("/admin/login", req.url)
     return NextResponse.redirect(loginUrl)
   }
 
   return NextResponse.next()
-})
+}
 
 export const config = {
   matcher: ["/admin/:path*"],
