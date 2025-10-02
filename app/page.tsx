@@ -1,6 +1,14 @@
 import Link from "next/link"
+import type { Metadata } from "next"
 import { getPosts } from "./actions/posts"
 import { getUser } from "./actions/user"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const user = await getUser()
+  return {
+    title: `${user?.name || "個人"}の日記`,
+  }
+}
 
 export default async function Home() {
   const posts = await getPosts()

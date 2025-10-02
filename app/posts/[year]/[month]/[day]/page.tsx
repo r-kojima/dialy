@@ -7,6 +7,15 @@ interface PageProps {
   params: Promise<{ year: string; month: string; day: string }>
 }
 
+import type { Metadata } from "next"
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { month, day } = await params
+  return {
+    title: `${Number.parseInt(month)}月${Number.parseInt(day)}日`,
+  }
+}
+
 export default async function PostPage({ params }: PageProps) {
   const { year, month, day } = await params
   const post = await getPostByDate(year, month, day)
