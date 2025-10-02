@@ -12,19 +12,11 @@ datasource db {
 
 model Post {
   id        String   @id @default(cuid())
-  title     String
-  slug      String   @unique
+  diaryDate DateTime @unique @db.Date
   content   String   // マークダウン本文
   published Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  tags      Tag[]
-}
-
-model Tag {
-  id    String @id @default(cuid())
-  name  String @unique
-  posts Post[]
 }
 
 model User {

@@ -6,47 +6,34 @@ import { prisma } from "@/lib/prisma"
 export async function getPosts() {
   return await prisma.post.findMany({
     where: { published: true },
-    orderBy: { createdAt: "desc" },
-    include: { tags: true },
+    orderBy: { diaryDate: "desc" },
   })
 }
 
 export async function getAllPosts() {
   return await prisma.post.findMany({
-    orderBy: { createdAt: "desc" },
-    include: { tags: true },
+    orderBy: { diaryDate: "desc" },
   })
 }
 
-export async function getPostBySlug(slug: string) {
+export async function getPostByDate(
+  year: string,
+  month: string,
+  day: string,
+) {
+  const date = new Date(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
   return await prisma.post.findUnique({
-    where: { slug },
-    include: { tags: true },
+    where: { diaryDate: date },
   })
 }
 
 export async function createPost(data: {
-  title: string
   content: string
-  slug: string
+  diaryDate: Date
   published?: boolean
-  tags?: string[]
 }) {
-  const { tags, ...postData } = data
-
   const post = await prisma.post.create({
-    data: {
-      ...postData,
-      tags: tags
-        ? {
-            connectOrCreate: tags.map((name) => ({
-              where: { name },
-              create: { name },
-            })),
-          }
-        : undefined,
-    },
-    include: { tags: true },
+    data,
   })
 
   revalidatePath("/")
@@ -58,35 +45,24 @@ export async function createPost(data: {
 export async function updatePost(
   id: string,
   data: {
-    title?: string
     content?: string
-    slug?: string
+    diaryDate?: Date
     published?: boolean
-    tags?: string[]
   },
 ) {
-  const { tags, ...postData } = data
-
   const post = await prisma.post.update({
     where: { id },
-    data: {
-      ...postData,
-      tags: tags
-        ? {
-            set: [],
-            connectOrCreate: tags.map((name) => ({
-              where: { name },
-              create: { name },
-            })),
-          }
-        : undefined,
-    },
-    include: { tags: true },
+    data,
   })
+
+  const date = post.diaryDate
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
 
   revalidatePath("/")
   revalidatePath("/posts")
-  revalidatePath(`/posts/${post.slug}`)
+  revalidatePath(`/posts/${year}/${month}/${day}`)
 
   return post
 }
@@ -116,7 +92,7 @@ export async function togglePublished(id: string) {
 
   revalidatePath("/")
   revalidatePath("/posts")
-  revalidatePath(`/posts/${updated.slug}`)
+  revalidatePath(`/posts/${updated.diaryDate.getFullYear()}/${String(updated.diaryDate.getMonth() + 1).padStart(2, "0")}/${String(updated.diaryDate.getDate()).padStart(2, "0")}`)
 
   return updated
 }
