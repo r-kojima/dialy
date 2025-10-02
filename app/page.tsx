@@ -22,14 +22,16 @@ export default async function Home() {
                 key={post.id}
                 className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow"
               >
-                <Link href={`/posts/${post.slug}`}>
+                <Link
+                  href={`/posts/${post.diaryDate.getFullYear()}/${String(post.diaryDate.getMonth() + 1).padStart(2, "0")}/${String(post.diaryDate.getDate()).padStart(2, "0")}`}
+                >
                   <h2 className="text-2xl font-semibold mb-2 hover:text-blue-600 transition-colors">
                     {post.title}
                   </h2>
                 </Link>
                 <div className="flex items-center gap-4 text-sm text-gray-500">
-                  <time dateTime={post.createdAt.toISOString()}>
-                    {new Date(post.createdAt).toLocaleDateString("ja-JP")}
+                  <time dateTime={post.diaryDate.toISOString()}>
+                    {new Date(post.diaryDate).toLocaleDateString("ja-JP")}
                   </time>
                   {post.tags.length > 0 && (
                     <div className="flex gap-2">
