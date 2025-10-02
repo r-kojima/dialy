@@ -25,30 +25,20 @@ export default async function Home() {
                 <Link
                   href={`/posts/${post.diaryDate.getFullYear()}/${String(post.diaryDate.getMonth() + 1).padStart(2, "0")}/${String(post.diaryDate.getDate()).padStart(2, "0")}`}
                 >
-                  <h2 className="text-2xl font-semibold mb-2 hover:text-blue-600 transition-colors">
-                    {post.title}
-                  </h2>
-                </Link>
-                <div className="flex items-center gap-4 text-sm text-gray-500">
-                  <time dateTime={post.diaryDate.toISOString()}>
-                    {new Date(post.diaryDate).toLocaleDateString("ja-JP")}
+                  <time
+                    dateTime={post.diaryDate.toISOString()}
+                    className="text-2xl font-semibold mb-3 block hover:text-blue-600 transition-colors"
+                  >
+                    {new Date(post.diaryDate).toLocaleDateString("ja-JP", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
                   </time>
-                  {post.tags.length > 0 && (
-                    <div className="flex gap-2">
-                      {post.tags.map((tag) => (
-                        <span
-                          key={tag.id}
-                          className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs"
-                        >
-                          {tag.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <p className="mt-3 text-gray-600 dark:text-gray-300 line-clamp-3">
-                  {post.content.substring(0, 150)}...
-                </p>
+                  <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
+                    {post.content.substring(0, 150)}...
+                  </p>
+                </Link>
               </article>
             ))}
           </div>

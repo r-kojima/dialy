@@ -7,12 +7,10 @@ import { MarkdownRenderer } from "@/app/components/markdown-renderer"
 
 export default function NewPostPage() {
   const router = useRouter()
-  const [title, setTitle] = useState("")
   const [diaryDate, setDiaryDate] = useState(
     new Date().toISOString().split("T")[0],
   )
   const [content, setContent] = useState("")
-  const [tags, setTags] = useState("")
   const [published, setPublished] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
@@ -22,16 +20,9 @@ export default function NewPostPage() {
     setIsSubmitting(true)
 
     try {
-      const tagArray = tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter(Boolean)
-
       await createPost({
-        title,
         diaryDate: new Date(diaryDate),
         content,
-        tags: tagArray,
         published,
       })
 
@@ -50,20 +41,6 @@ export default function NewPostPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium mb-2">
-            タイトル
-          </label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
           <label htmlFor="diaryDate" className="block text-sm font-medium mb-2">
             日付
           </label>
@@ -74,20 +51,6 @@ export default function NewPostPage() {
             onChange={(e) => setDiaryDate(e.target.value)}
             required
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="tags" className="block text-sm font-medium mb-2">
-            タグ (カンマ区切り)
-          </label>
-          <input
-            type="text"
-            id="tags"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="日記, 技術, 雑記"
           />
         </div>
 
