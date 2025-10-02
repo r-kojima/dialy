@@ -1,5 +1,8 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
 
 function hexToUint8Array(hex: string): Uint8Array {
   const bytes = new Uint8Array(hex.length / 2)
@@ -52,29 +55,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
-        const adminEmail = process.env.ADMIN_EMAIL
-        const adminPasswordHash = process.env.ADMIN_PASSWORD
-
-        if (!adminEmail || !adminPasswordHash) {
+        if (!credentials?.email || !credentials?.password) {
           return null
         }
 
-        if (
-          credentials?.email === adminEmail &&
-          credentials?.password &&
-          (await verifyPassword(
-            credentials.password as string,
-            adminPasswordHash,
-          ))
-        ) {
-          return {
-            id: "admin",
-            email: adminEmail,
-            name: "Admin",
-          }
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email as string },
+        })
+
+        if (!user) {
+          return null
         }
 
-        return null
+        const isValidPassword = await verifyPassword(
+          credentials.password as string,
+          user.password,
+        )
+
+        if (!isValidPassword) {
+          return null
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        }
       },
     }),
   ],

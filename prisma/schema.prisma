@@ -26,3 +26,12 @@ model Tag {
   name  String @unique
   posts Post[]
 }
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // PBKDF2 hash (salt:hash format)
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
