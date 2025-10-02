@@ -1,15 +1,15 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { getPostBySlug } from "@/app/actions/posts"
+import { getPostByDate } from "@/app/actions/posts"
 import { MarkdownRenderer } from "@/app/components/markdown-renderer"
 
 interface PageProps {
-  params: Promise<{ slug: string }>
+  params: Promise<{ year: string; month: string; day: string }>
 }
 
 export default async function PostPage({ params }: PageProps) {
-  const { slug } = await params
-  const post = await getPostBySlug(slug)
+  const { year, month, day } = await params
+  const post = await getPostByDate(year, month, day)
 
   if (!post || !post.published) {
     notFound()
@@ -28,8 +28,8 @@ export default async function PostPage({ params }: PageProps) {
         <header className="mb-8">
           <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
           <div className="flex items-center gap-4 text-sm text-gray-500">
-            <time dateTime={post.createdAt.toISOString()}>
-              {new Date(post.createdAt).toLocaleDateString("ja-JP", {
+            <time dateTime={post.diaryDate.toISOString()}>
+              {new Date(post.diaryDate).toLocaleDateString("ja-JP", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",

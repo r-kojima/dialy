@@ -8,7 +8,9 @@ import { MarkdownRenderer } from "@/app/components/markdown-renderer"
 export default function NewPostPage() {
   const router = useRouter()
   const [title, setTitle] = useState("")
-  const [slug, setSlug] = useState("")
+  const [diaryDate, setDiaryDate] = useState(
+    new Date().toISOString().split("T")[0],
+  )
   const [content, setContent] = useState("")
   const [tags, setTags] = useState("")
   const [published, setPublished] = useState(false)
@@ -27,7 +29,7 @@ export default function NewPostPage() {
 
       await createPost({
         title,
-        slug,
+        diaryDate: new Date(diaryDate),
         content,
         tags: tagArray,
         published,
@@ -36,7 +38,7 @@ export default function NewPostPage() {
       router.push("/")
     } catch (error) {
       console.error("Failed to create post:", error)
-      alert("記事の作成に失敗しました")
+      alert("日記の作成に失敗しました")
     } finally {
       setIsSubmitting(false)
     }
@@ -44,7 +46,7 @@ export default function NewPostPage() {
 
   return (
     <div className="min-h-screen p-8 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">新しい記事を作成</h1>
+      <h1 className="text-3xl font-bold mb-8">新しい日記を作成</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -62,22 +64,17 @@ export default function NewPostPage() {
         </div>
 
         <div>
-          <label htmlFor="slug" className="block text-sm font-medium mb-2">
-            スラッグ (URL用)
+          <label htmlFor="diaryDate" className="block text-sm font-medium mb-2">
+            日付
           </label>
           <input
-            type="text"
-            id="slug"
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
+            type="date"
+            id="diaryDate"
+            value={diaryDate}
+            onChange={(e) => setDiaryDate(e.target.value)}
             required
-            pattern="[a-z0-9-]+"
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="my-first-post"
           />
-          <p className="text-xs text-gray-500 mt-1">
-            小文字、数字、ハイフンのみ使用可能
-          </p>
         </div>
 
         <div>

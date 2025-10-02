@@ -6,21 +6,26 @@ import { prisma } from "@/lib/prisma"
 export async function getPosts() {
   return await prisma.post.findMany({
     where: { published: true },
-    orderBy: { createdAt: "desc" },
+    orderBy: { diaryDate: "desc" },
     include: { tags: true },
   })
 }
 
 export async function getAllPosts() {
   return await prisma.post.findMany({
-    orderBy: { createdAt: "desc" },
+    orderBy: { diaryDate: "desc" },
     include: { tags: true },
   })
 }
 
-export async function getPostBySlug(slug: string) {
+export async function getPostByDate(
+  year: string,
+  month: string,
+  day: string,
+) {
+  const date = new Date(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
   return await prisma.post.findUnique({
-    where: { slug },
+    where: { diaryDate: date },
     include: { tags: true },
   })
 }
@@ -28,7 +33,7 @@ export async function getPostBySlug(slug: string) {
 export async function createPost(data: {
   title: string
   content: string
-  slug: string
+  diaryDate: Date
   published?: boolean
   tags?: string[]
 }) {
@@ -60,7 +65,7 @@ export async function updatePost(
   data: {
     title?: string
     content?: string
-    slug?: string
+    diaryDate?: Date
     published?: boolean
     tags?: string[]
   },
@@ -84,9 +89,14 @@ export async function updatePost(
     include: { tags: true },
   })
 
+  const date = post.diaryDate
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+
   revalidatePath("/")
   revalidatePath("/posts")
-  revalidatePath(`/posts/${post.slug}`)
+  revalidatePath(`/posts/${year}/${month}/${day}`)
 
   return post
 }
@@ -114,9 +124,14 @@ export async function togglePublished(id: string) {
     data: { published: !post.published },
   })
 
+  const date = updated.diaryDate
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+
   revalidatePath("/")
   revalidatePath("/posts")
-  revalidatePath(`/posts/${updated.slug}`)
+  revalidatePath(`/posts/${year}/${month}/${day}`)
 
   return updated
 }
