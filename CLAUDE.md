@@ -28,20 +28,22 @@ npx prisma generate      # Prisma Clientの再生成
 
 ### データ層
 - **データベース**: PostgreSQL / Prisma ORM使用
-- **スキーマ**: `prisma/schema.prisma`でPostとTagモデルを定義、多対多のリレーション
+- **スキーマ**: `prisma/schema.prisma`でPostとUserモデルを定義
 - **クライアント**: `lib/prisma.ts`でPrisma Clientのシングルトン実装（ホットリロード時の接続問題を回避）
 
 ### アプリケーション層
-- **Server Actions**: `app/actions/posts.ts`に全てのデータベース操作（記事のCRUD）を集約
+- **Server Actions**:
+  - `app/actions/posts.ts`: 記事のCRUD操作を集約
+  - `app/actions/user.ts`: ユーザー情報の取得
   - 全ての変更操作で`revalidatePath()`を呼び出し、Next.jsのキャッシュを無効化
-  - タグは`connectOrCreate`パターンで自動作成
 - **データフロー**: ページ → Server Actions → Prisma → データベース
 
 ### プレゼンテーション層
 - **ページ**:
   - `/` (app/page.tsx): 公開済み記事の一覧表示
-  - `/posts/[slug]` (app/posts/[slug]/page.tsx): 個別記事の表示（マークダウンレンダリング）
-  - `/posts/new` (app/posts/new/page.tsx): 記事作成フォーム（Clientコンポーネント）
+  - `/admin` (app/admin/page.tsx): 管理画面（全記事の一覧、公開/下書きステータス表示）
+  - `/posts/[year]/[month]/[day]` (app/posts/[year]/[month]/[day]/page.tsx): 個別記事の表示（マークダウンレンダリング）
+  - `/admin/posts/new` (app/admin/posts/new/page.tsx): 記事作成フォーム（Clientコンポーネント）
 - **コンポーネント**:
   - `MarkdownRenderer` (app/components/markdown-renderer.tsx): react-markdownを使用、GFMとシンタックスハイライト対応
 
@@ -62,17 +64,6 @@ export async function createPost(data) {
 }
 ```
 
-### タグ管理
-タグは`connectOrCreate`で存在しないタグを自動作成:
-```typescript
-tags: {
-  connectOrCreate: tags.map(name => ({
-    where: { name },
-    create: { name }
-  }))
-}
-```
-
 ### マークダウンワークフロー
 1. 記事本文は`Post.content`にプレーンなマークダウンテキストとして保存
 2. `MarkdownRenderer`コンポーネントがクライアント側でマークダウンを処理
@@ -83,20 +74,25 @@ tags: {
 ```prisma
 Post {
   id: String (cuid)
-  title: String
-  slug: String (一意、URLに使用)
+  diaryDate: DateTime (一意、日付型、URLに使用)
   content: String (マークダウン形式)
   published: Boolean (デフォルト: false)
-  tags: Tag[]
   createdAt/updatedAt: DateTime
 }
 
-Tag {
+User {
   id: String (cuid)
-  name: String (一意)
-  posts: Post[]
+  email: String (一意)
+  password: String (PBKDF2ハッシュ、salt:hash形式)
+  name: String
+  createdAt/updatedAt: DateTime
 }
 ```
+
+### URL構造
+- 記事のURLは日付ベース: `/posts/[year]/[month]/[day]`
+- 例: `/posts/2024/01/15`（2024年1月15日の記事）
+- 1日1記事の制約（`diaryDate`が一意）
 
 ## デプロイ（Vercel）
 
