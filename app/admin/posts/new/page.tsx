@@ -36,7 +36,7 @@ export default function NewPostPage() {
       router.push("/")
     } catch (error) {
       console.error("Failed to create post:", error)
-      alert("記事の作成に失敗しました")
+      alert("日記の作成に失敗しました")
     } finally {
       setIsSubmitting(false)
     }
@@ -44,7 +44,7 @@ export default function NewPostPage() {
 
   return (
     <div className="min-h-screen p-8 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">新しい記事を作成</h1>
+      <h1 className="text-3xl font-bold mb-8">新しい日記を作成</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>

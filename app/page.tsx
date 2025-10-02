@@ -14,7 +14,7 @@ export default async function Home() {
 
       <main>
         {posts.length === 0 ? (
-          <p className="text-gray-500">まだ記事がありません。</p>
+          <p className="text-gray-500">まだ日記がありません。</p>
         ) : (
           <div className="space-y-6">
             {posts.map((post) => (
