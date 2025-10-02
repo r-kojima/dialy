@@ -1,18 +1,18 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { getPostBySlug } from "@/app/actions/posts";
-import { MarkdownRenderer } from "@/app/components/markdown-renderer";
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { getPostBySlug } from "@/app/actions/posts"
+import { MarkdownRenderer } from "@/app/components/markdown-renderer"
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }
 
 export default async function PostPage({ params }: PageProps) {
-  const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const { slug } = await params
+  const post = await getPostBySlug(slug)
 
   if (!post || !post.published) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -55,5 +55,5 @@ export default async function PostPage({ params }: PageProps) {
         </div>
       </article>
     </div>
-  );
+  )
 }

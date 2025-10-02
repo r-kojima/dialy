@@ -1,29 +1,29 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { createPost } from "@/app/actions/posts";
-import { MarkdownRenderer } from "@/app/components/markdown-renderer";
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { createPost } from "@/app/actions/posts"
+import { MarkdownRenderer } from "@/app/components/markdown-renderer"
 
 export default function NewPostPage() {
-  const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
-  const [content, setContent] = useState("");
-  const [tags, setTags] = useState("");
-  const [published, setPublished] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
+  const router = useRouter()
+  const [title, setTitle] = useState("")
+  const [slug, setSlug] = useState("")
+  const [content, setContent] = useState("")
+  const [tags, setTags] = useState("")
+  const [published, setPublished] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPreview, setShowPreview] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+    e.preventDefault()
+    setIsSubmitting(true)
 
     try {
       const tagArray = tags
         .split(",")
         .map((tag) => tag.trim())
-        .filter(Boolean);
+        .filter(Boolean)
 
       await createPost({
         title,
@@ -31,16 +31,16 @@ export default function NewPostPage() {
         content,
         tags: tagArray,
         published,
-      });
+      })
 
-      router.push("/");
+      router.push("/")
     } catch (error) {
-      console.error("Failed to create post:", error);
-      alert("記事の作成に失敗しました");
+      console.error("Failed to create post:", error)
+      alert("記事の作成に失敗しました")
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen p-8 max-w-6xl mx-auto">
@@ -158,5 +158,5 @@ export default function NewPostPage() {
         </div>
       </form>
     </div>
-  );
+  )
 }

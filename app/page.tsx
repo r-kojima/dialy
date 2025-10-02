@@ -1,8 +1,8 @@
-import Link from "next/link";
-import { getPosts } from "./actions/posts";
+import Link from "next/link"
+import { getPosts } from "./actions/posts"
 
 export default async function Home() {
-  const posts = await getPosts();
+  const posts = await getPosts()
 
   return (
     <div className="min-h-screen p-8 max-w-4xl mx-auto">
@@ -57,5 +57,5 @@ export default async function Home() {
         )}
       </main>
     </div>
-  );
+  )
 }
