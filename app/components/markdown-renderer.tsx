@@ -6,15 +6,18 @@ import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
 
 interface MarkdownRendererProps {
-	content: string;
+  content: string;
 }
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
-	return (
-		<div className="prose prose-slate dark:prose-invert max-w-none">
-			<ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
-				{content}
-			</ReactMarkdown>
-		</div>
-	);
+  return (
+    <div className="prose prose-slate dark:prose-invert max-w-none">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeHighlight]}
+      >
+        {content}
+      </ReactMarkdown>
+    </div>
+  );
 }
