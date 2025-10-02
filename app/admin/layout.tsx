@@ -1,5 +1,5 @@
-import { auth, signOut } from "@/auth"
 import Link from "next/link"
+import { auth, signOut } from "@/auth"
 
 export default async function AdminLayout({
   children,
@@ -13,7 +13,10 @@ export default async function AdminLayout({
       <header className="border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <Link href="/" className="text-lg font-semibold hover:text-blue-600">
+            <Link
+              href="/"
+              className="text-lg font-semibold hover:text-blue-600"
+            >
               個人日記
             </Link>
             <nav className="flex gap-4">
