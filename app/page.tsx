@@ -7,27 +7,29 @@ export default async function Home() {
   const user = await getUser()
 
   return (
-    <div className="min-h-screen p-8 max-w-4xl mx-auto">
-      <header className="mb-12">
-        <h1 className="text-4xl font-bold mb-4">{user?.name || "個人"}の日記</h1>
+    <div className="min-h-screen py-12 px-6 max-w-[680px] mx-auto">
+      <header className="mb-16">
+        <h1 className="text-4xl font-bold mb-2 text-foreground">
+          {user?.name || "個人"}の日記
+        </h1>
       </header>
 
       <main>
         {posts.length === 0 ? (
-          <p className="text-gray-500">まだ日記がありません。</p>
+          <p className="text-foreground-secondary">まだ日記がありません。</p>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-8">
             {posts.map((post) => (
               <article
                 key={post.id}
-                className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow"
+                className="bg-background-card border border-border rounded-lg p-8 hover:shadow-xl transition-all duration-200"
               >
                 <Link
                   href={`/posts/${post.diaryDate.getFullYear()}/${String(post.diaryDate.getMonth() + 1).padStart(2, "0")}/${String(post.diaryDate.getDate()).padStart(2, "0")}`}
                 >
                   <time
                     dateTime={post.diaryDate.toISOString()}
-                    className="text-2xl font-semibold mb-3 block hover:text-blue-600 transition-colors"
+                    className="text-2xl font-semibold mb-4 block text-accent-dark hover:text-accent transition-colors"
                   >
                     {new Date(post.diaryDate).toLocaleDateString("ja-JP", {
                       year: "numeric",
@@ -35,7 +37,7 @@ export default async function Home() {
                       day: "numeric",
                     })}
                   </time>
-                  <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
+                  <p className="text-foreground-secondary line-clamp-3 leading-relaxed">
                     {post.content.substring(0, 150)}...
                   </p>
                 </Link>

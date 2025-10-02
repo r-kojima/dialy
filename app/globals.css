@@ -3,26 +3,63 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf9f6;
+  --background-card: #ffffff;
+  --foreground: #1a1a1a;
+  --foreground-secondary: #2d2d2d;
+  --accent: #8b9a90;
+  --accent-dark: #6b7f73;
+  --border: #e8e6e1;
+}
+
+.dark {
+  --background: #1a1d1e;
+  --background-card: #2d3235;
+  --foreground: #e8e6e1;
+  --foreground-secondary: #d4d2cd;
+  --accent: #a8c5b8;
+  --accent-dark: #8da99d;
+  --border: #3a3d40;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-card: var(--background-card);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-border: var(--border);
+  --font-sans: var(--font-noto-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-size-base: 1.125rem;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+/* Proseスタイルのカスタマイズ */
+.prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-links: var(--accent-dark);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-code: var(--foreground-secondary);
+  --tw-prose-pre-bg: var(--background-card);
+  --tw-prose-pre-code: var(--foreground);
+  max-width: none;
+}
+
+.dark .prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-links: var(--accent);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-code: var(--foreground-secondary);
+  --tw-prose-pre-bg: var(--background-card);
+  --tw-prose-pre-code: var(--foreground);
 }

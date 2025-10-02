@@ -16,19 +16,19 @@ export default async function PostPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen p-8 max-w-4xl mx-auto">
+    <div className="min-h-screen py-12 px-6 max-w-[680px] mx-auto">
       <Link
         href="/"
-        className="text-blue-600 hover:text-blue-800 mb-8 inline-block"
+        className="text-accent-dark hover:text-accent mb-12 inline-block transition-colors"
       >
         ← 戻る
       </Link>
 
       <article>
-        <header className="mb-8">
+        <header className="mb-12">
           <time
             dateTime={post.diaryDate.toISOString()}
-            className="text-2xl font-bold text-gray-700 dark:text-gray-300"
+            className="text-3xl font-bold text-foreground"
           >
             {new Date(post.diaryDate).toLocaleDateString("ja-JP", {
               year: "numeric",
@@ -38,7 +38,7 @@ export default async function PostPage({ params }: PageProps) {
           </time>
         </header>
 
-        <div className="mt-8">
+        <div className="mt-12">
           <MarkdownRenderer content={post.content} />
         </div>
       </article>

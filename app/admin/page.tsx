@@ -7,32 +7,32 @@ export default async function AdminPage() {
   const user = await getUser()
 
   return (
-    <div className="min-h-screen p-8 max-w-4xl mx-auto">
-      <header className="mb-12">
-        <h1 className="text-4xl font-bold mb-4">管理画面</h1>
-        <p className="text-gray-600 dark:text-gray-400">
+    <div className="min-h-screen py-12 px-6 max-w-[680px] mx-auto">
+      <header className="mb-16">
+        <h1 className="text-4xl font-bold mb-2 text-foreground">管理画面</h1>
+        <p className="text-foreground-secondary">
           {user?.name}の日記管理
         </p>
       </header>
 
       <main>
         {posts.length === 0 ? (
-          <p className="text-gray-500">まだ日記がありません。</p>
+          <p className="text-foreground-secondary">まだ日記がありません。</p>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-8">
             {posts.map((post) => (
               <article
                 key={post.id}
-                className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow"
+                className="bg-background-card border border-border rounded-lg p-8 hover:shadow-xl transition-all duration-200"
               >
-                <div className="flex items-start justify-between">
+                <div className="flex items-start justify-between gap-4">
                   <Link
                     href={`/posts/${post.diaryDate.getFullYear()}/${String(post.diaryDate.getMonth() + 1).padStart(2, "0")}/${String(post.diaryDate.getDate()).padStart(2, "0")}`}
                     className="flex-1"
                   >
                     <time
                       dateTime={post.diaryDate.toISOString()}
-                      className="text-2xl font-semibold mb-3 block hover:text-blue-600 transition-colors"
+                      className="text-2xl font-semibold mb-4 block text-accent-dark hover:text-accent transition-colors"
                     >
                       {new Date(post.diaryDate).toLocaleDateString("ja-JP", {
                         year: "numeric",
@@ -40,15 +40,15 @@ export default async function AdminPage() {
                         day: "numeric",
                       })}
                     </time>
-                    <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
+                    <p className="text-foreground-secondary line-clamp-3 leading-relaxed">
                       {post.content.substring(0, 150)}...
                     </p>
                   </Link>
                   <span
-                    className={`ml-4 px-3 py-1 text-sm rounded ${
+                    className={`px-3 py-1 text-sm font-medium rounded-md whitespace-nowrap ${
                       post.published
-                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                        : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+                        ? "bg-accent/20 text-accent-dark"
+                        : "bg-border text-foreground-secondary"
                     }`}
                   >
                     {post.published ? "公開" : "下書き"}
