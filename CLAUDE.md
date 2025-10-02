@@ -27,7 +27,7 @@ npx prisma generate      # Prisma Clientの再生成
 ## アーキテクチャ
 
 ### データ層
-- **データベース**: SQLite (開発環境) / Prisma ORM使用
+- **データベース**: PostgreSQL / Prisma ORM使用
 - **スキーマ**: `prisma/schema.prisma`でPostとTagモデルを定義、多対多のリレーション
 - **クライアント**: `lib/prisma.ts`でPrisma Clientのシングルトン実装（ホットリロード時の接続問題を回避）
 
@@ -101,6 +101,6 @@ Tag {
 ## 開発時の注意事項
 
 - ビルドと開発サーバーにTurbopackを使用
-- SQLiteデータベースファイル: `prisma/dev.db`
+- PostgreSQLデータベース接続情報は`.env`ファイルのDATABASE_URLで設定
 - 環境変数は`.env`ファイル (DATABASE_URL)
 - リント・フォーマットにBiomeを使用（ESLint/Prettierではない）
