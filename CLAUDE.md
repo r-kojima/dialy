@@ -98,6 +98,23 @@ Tag {
 }
 ```
 
+## デプロイ（Vercel）
+
+### ビルド設定
+- **Build Command**: `prisma generate && prisma migrate deploy && next build --turbopack`
+  - Prisma Clientの生成とマイグレーション適用を本番ビルド前に実行
+- **Environment Variables**: Vercelダッシュボードで`DATABASE_URL`を設定
+
+### 自動デプロイ
+- **mainブランチへのpush** → 本番環境へ自動デプロイ
+- **他のブランチへのpush** → プレビュー環境へ自動デプロイ
+- Vercel DashboardのSettings → GitでGitHubリポジトリと連携
+
+### Edge Function制限
+- middlewareはEdge Runtimeで実行されるため、1MB以下に制限
+- NextAuthの`auth()`関数は大きいため、セッションクッキーの存在チェックのみを実装
+- 詳細な認証チェックはServer ComponentやServer Actionで実施
+
 ## 開発時の注意事項
 
 - ビルドと開発サーバーにTurbopackを使用
