@@ -4,11 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "prisma generate && prisma migrate deploy && next build --turbopack",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write",
-    "postinstall": "prisma generate"
+    "format": "biome format --write"
   },
   "dependencies": {
     "@prisma/client": "^6.16.3",
