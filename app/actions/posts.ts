@@ -90,9 +90,14 @@ export async function togglePublished(id: string) {
     data: { published: !post.published },
   })
 
+  const date = updated.diaryDate
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+
   revalidatePath("/")
   revalidatePath("/posts")
-  revalidatePath(`/posts/${updated.diaryDate.getFullYear()}/${String(updated.diaryDate.getMonth() + 1).padStart(2, "0")}/${String(updated.diaryDate.getDate()).padStart(2, "0")}`)
+  revalidatePath(`/posts/${year}/${month}/${day}`)
 
   return updated
 }
