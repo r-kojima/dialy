@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { auth, signOut } from "@/auth"
+import { getUser } from "@/app/actions/user"
 
 export default async function AdminLayout({
   children,
@@ -7,6 +8,7 @@ export default async function AdminLayout({
   children: React.ReactNode
 }) {
   const session = await auth()
+  const user = await getUser()
 
   return (
     <div>
@@ -17,7 +19,7 @@ export default async function AdminLayout({
               href="/"
               className="text-lg font-semibold hover:text-blue-600"
             >
-              個人日記
+              {user?.name || "個人"}の日記
             </Link>
             <nav className="flex gap-4">
               <Link

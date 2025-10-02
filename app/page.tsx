@@ -1,13 +1,15 @@
 import Link from "next/link"
 import { getPosts } from "./actions/posts"
+import { getUser } from "./actions/user"
 
 export default async function Home() {
   const posts = await getPosts()
+  const user = await getUser()
 
   return (
     <div className="min-h-screen p-8 max-w-4xl mx-auto">
       <header className="mb-12">
-        <h1 className="text-4xl font-bold mb-4">個人日記</h1>
+        <h1 className="text-4xl font-bold mb-4">{user?.name || "個人"}の日記</h1>
       </header>
 
       <main>
