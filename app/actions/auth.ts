@@ -1,15 +1,7 @@
+"use server"
+
 import { webcrypto } from "node:crypto"
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient()
-
-const email = process.argv[2]
-const password = process.argv[3]
-
-if (!email || !password) {
-  console.error("Usage: npx tsx scripts/create-admin.ts <email> <password>")
-  process.exit(1)
-}
+import { prisma } from "@/lib/prisma"
 
 async function hashPassword(password: string): Promise<string> {
   const saltArray = webcrypto.getRandomValues(new Uint8Array(16))
@@ -46,14 +38,26 @@ async function hashPassword(password: string): Promise<string> {
   return `${salt}:${derivedHash}`
 }
 
-async function createAdmin() {
+export async function createAdminUser(formData: FormData) {
   try {
     // 既存のユーザーが存在するか確認
     const existingUserCount = await prisma.user.count()
     if (existingUserCount > 0) {
-      console.error("\n✗ Error: An admin account already exists")
-      console.error("  Only one admin account is allowed")
-      process.exit(1)
+      return {
+        success: false,
+        error: "管理者アカウントは既に存在します",
+      }
+    }
+
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
+    const name = formData.get("name") as string
+
+    if (!email || !password || !name) {
+      return {
+        success: false,
+        error: "すべてのフィールドを入力してください",
+      }
     }
 
     const hashedPassword = await hashPassword(password)
@@ -62,24 +66,33 @@ async function createAdmin() {
       data: {
         email,
         password: hashedPassword,
-        name: "Admin",
+        name,
       },
     })
 
-    console.log("\n✓ Admin user created successfully:")
-    console.log(`  Email: ${user.email}`)
-    console.log(`  Name: ${user.name}`)
-    console.log(`  ID: ${user.id}`)
+    return {
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+    }
   } catch (error) {
     if (error instanceof Error && "code" in error && error.code === "P2002") {
-      console.error("\n✗ Error: User with this email already exists")
-    } else {
-      console.error("\n✗ Error creating admin user:", error)
+      return {
+        success: false,
+        error: "このメールアドレスは既に使用されています",
+      }
     }
-    process.exit(1)
-  } finally {
-    await prisma.$disconnect()
+    return {
+      success: false,
+      error: "管理者アカウントの作成に失敗しました",
+    }
   }
 }
 
-createAdmin()
+export async function checkAdminExists() {
+  const count = await prisma.user.count()
+  return count > 0
+}
