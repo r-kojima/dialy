@@ -27,7 +27,7 @@ export default async function AdminPage() {
               >
                 <div className="flex items-start justify-between gap-4">
                   <Link
-                    href={`/posts/${post.diaryDate.getFullYear()}/${String(post.diaryDate.getMonth() + 1).padStart(2, "0")}/${String(post.diaryDate.getDate()).padStart(2, "0")}`}
+                    href={`/admin/posts/${post.id}/edit`}
                     className="flex-1"
                   >
                     <time

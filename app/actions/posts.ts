@@ -27,6 +27,12 @@ export async function getPostByDate(
   })
 }
 
+export async function getPostById(id: string) {
+  return await prisma.post.findUnique({
+    where: { id },
+  })
+}
+
 export async function createPost(data: {
   content: string
   diaryDate: Date
