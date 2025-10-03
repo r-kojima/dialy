@@ -9,7 +9,9 @@ interface PageProps {
 
 import type { Metadata } from "next"
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { month, day } = await params
   return {
     title: `${Number.parseInt(month)}月${Number.parseInt(day)}日`,

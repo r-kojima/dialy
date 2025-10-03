@@ -1,10 +1,10 @@
 "use client"
 
+import type { Post } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { updatePost } from "@/app/actions/posts"
 import { MarkdownRenderer } from "@/app/components/markdown-renderer"
-import type { Post } from "@prisma/client"
 
 export function EditPostForm({ post }: { post: Post }) {
   const router = useRouter()

@@ -10,9 +10,7 @@ export default async function AdminPage() {
     <div className="min-h-screen py-12 px-6 max-w-[680px] mx-auto">
       <header className="mb-16">
         <h1 className="text-4xl font-bold mb-2 text-foreground">管理画面</h1>
-        <p className="text-foreground-secondary">
-          {user?.name}の日記管理
-        </p>
+        <p className="text-foreground-secondary">{user?.name}の日記管理</p>
       </header>
 
       <main>

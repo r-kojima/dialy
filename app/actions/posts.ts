@@ -16,12 +16,10 @@ export async function getAllPosts() {
   })
 }
 
-export async function getPostByDate(
-  year: string,
-  month: string,
-  day: string,
-) {
-  const date = new Date(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`)
+export async function getPostByDate(year: string, month: string, day: string) {
+  const date = new Date(
+    `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`,
+  )
   return await prisma.post.findUnique({
     where: { diaryDate: date },
   })
