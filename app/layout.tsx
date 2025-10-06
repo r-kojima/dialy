@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Noto_Sans_JP, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { ThemeToggle } from "./components/theme-toggle"
+import { Toaster } from "sonner"
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
       >
         <ThemeToggle />
         {children}
+        <Toaster />
       </body>
     </html>
   )

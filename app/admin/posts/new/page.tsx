@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { toast } from "sonner"
 import { createPost } from "@/app/actions/posts"
 import { MarkdownRenderer } from "@/app/components/markdown-renderer"
 
@@ -20,16 +21,27 @@ export default function NewPostPage() {
     setIsSubmitting(true)
 
     try {
-      await createPost({
+      const post = await createPost({
         diaryDate: new Date(diaryDate),
         content,
         published,
       })
 
+      if (published) {
+        const date = new Date(diaryDate)
+        const year = date.getFullYear()
+        const month = (date.getMonth() + 1).toString().padStart(2, "0")
+        const day = date.getDate().toString().padStart(2, "0")
+        const url = `${window.location.origin}/posts/${year}/${month}/${day}`
+
+        await navigator.clipboard.writeText(url)
+        toast.success("記事を公開し、URLをクリップボードにコピーしました")
+      }
+
       router.push("/admin")
     } catch (error) {
       console.error("Failed to create post:", error)
-      alert("日記の作成に失敗しました")
+      toast.error("日記の作成に失敗しました")
     } finally {
       setIsSubmitting(false)
     }
