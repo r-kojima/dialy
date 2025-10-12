@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { auth, signOut } from "@/auth"
 import { getUser } from "@/app/actions/user"
+import { auth, signOut } from "@/auth"
 
 export default async function AdminLayout({
   children,
@@ -33,9 +33,6 @@ export default async function AdminLayout({
 
           {session && (
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600 dark:text-gray-400">
-                {session.user?.email}
-              </span>
               <form
                 action={async () => {
                   "use server"
