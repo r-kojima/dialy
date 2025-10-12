@@ -12,9 +12,25 @@ import type { Metadata } from "next"
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { month, day } = await params
+  const { year, month, day } = await params
+  const dateStr = `${Number.parseInt(month, 10)}月${Number.parseInt(day, 10)}日`
+  const url = `https://diary-murex-psi.vercel.app/posts/${year}/${month}/${day}`
+
   return {
-    title: `${Number.parseInt(month)}月${Number.parseInt(day)}日`,
+    title: dateStr,
+    openGraph: {
+      title: dateStr,
+      description: "日記",
+      url: url,
+      siteName: "日記",
+      locale: "ja_JP",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dateStr,
+      description: "日記",
+    },
   }
 }
 
