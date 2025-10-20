@@ -3,11 +3,27 @@
 import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 
-export async function getPosts() {
-  return await prisma.post.findMany({
-    where: { published: true },
-    orderBy: { diaryDate: "desc" },
-  })
+export async function getPosts(page = 1, pageSize = 10) {
+  const skip = (page - 1) * pageSize
+
+  const [posts, totalCount] = await Promise.all([
+    prisma.post.findMany({
+      where: { published: true },
+      orderBy: { diaryDate: "desc" },
+      skip,
+      take: pageSize,
+    }),
+    prisma.post.count({
+      where: { published: true },
+    }),
+  ])
+
+  return {
+    posts,
+    totalCount,
+    totalPages: Math.ceil(totalCount / pageSize),
+    currentPage: page,
+  }
 }
 
 export async function getAllPosts() {
