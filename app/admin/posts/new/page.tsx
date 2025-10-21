@@ -34,8 +34,15 @@ export default function NewPostPage() {
         const day = date.getDate().toString().padStart(2, "0")
         const url = `${window.location.origin}/posts/${year}/${month}/${day}`
 
+        try {
         await navigator.clipboard.writeText(url)
         toast.success("記事を公開し、URLをクリップボードにコピーしました")
+        } catch (clipboardError) {
+          console.error("Failed to copy to clipboard:", clipboardError)
+          toast.success("記事を公開しました（URLのコピーに失敗しました）")
+        }
+      } else {
+        toast.success("日記を作成しました")
       }
 
       router.push("/admin")
