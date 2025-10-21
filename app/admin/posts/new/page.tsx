@@ -21,7 +21,7 @@ export default function NewPostPage() {
     setIsSubmitting(true)
 
     try {
-      const post = await createPost({
+      await createPost({
         diaryDate: new Date(diaryDate),
         content,
         published,
@@ -35,8 +35,8 @@ export default function NewPostPage() {
         const url = `${window.location.origin}/posts/${year}/${month}/${day}`
 
         try {
-        await navigator.clipboard.writeText(url)
-        toast.success("記事を公開し、URLをクリップボードにコピーしました")
+          await navigator.clipboard.writeText(url)
+          toast.success("記事を公開し、URLをクリップボードにコピーしました")
         } catch (clipboardError) {
           console.error("Failed to copy to clipboard:", clipboardError)
           toast.success("記事を公開しました（URLのコピーに失敗しました）")
