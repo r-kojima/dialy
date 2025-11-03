@@ -121,3 +121,26 @@ export async function togglePublished(id: string) {
 
   return updated
 }
+
+export async function getAdjacentPosts(currentDate: Date) {
+  const [prevPost, nextPost] = await Promise.all([
+    prisma.post.findFirst({
+      where: {
+        published: true,
+        diaryDate: { lt: currentDate },
+      },
+      orderBy: { diaryDate: "desc" },
+      select: { diaryDate: true },
+    }),
+    prisma.post.findFirst({
+      where: {
+        published: true,
+        diaryDate: { gt: currentDate },
+      },
+      orderBy: { diaryDate: "asc" },
+      select: { diaryDate: true },
+    }),
+  ])
+
+  return { prevPost, nextPost }
+}

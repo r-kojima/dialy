@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { getPostByDate } from "@/app/actions/posts"
+import { getAdjacentPosts, getPostByDate } from "@/app/actions/posts"
 import { MarkdownRenderer } from "@/app/components/markdown-renderer"
 
 interface PageProps {
@@ -42,6 +42,23 @@ export default async function PostPage({ params }: PageProps) {
     notFound()
   }
 
+  const { prevPost, nextPost } = await getAdjacentPosts(post.diaryDate)
+
+  const formatPostUrl = (date: Date) => {
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, "0")
+    const d = String(date.getDate()).padStart(2, "0")
+    return `/posts/${y}/${m}/${d}`
+  }
+
+  const formatDate = (date: Date) => {
+    return new Date(date).toLocaleDateString("ja-JP", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  }
+
   return (
     <div className="min-h-screen py-12 px-6 max-w-[680px] mx-auto">
       <Link
@@ -68,6 +85,39 @@ export default async function PostPage({ params }: PageProps) {
         <div className="mt-12">
           <MarkdownRenderer content={post.content} />
         </div>
+
+        <nav className="mt-16 pt-8 border-t border-border flex justify-between items-center">
+          <div>
+            {prevPost ? (
+              <Link
+                href={formatPostUrl(prevPost.diaryDate)}
+                className="text-accent-dark hover:text-accent transition-colors inline-flex items-center gap-2"
+              >
+                <span>←</span>
+                <span className="text-sm">
+                  {formatDate(prevPost.diaryDate)}
+                </span>
+              </Link>
+            ) : (
+              <div />
+            )}
+          </div>
+          <div>
+            {nextPost ? (
+              <Link
+                href={formatPostUrl(nextPost.diaryDate)}
+                className="text-accent-dark hover:text-accent transition-colors inline-flex items-center gap-2"
+              >
+                <span className="text-sm">
+                  {formatDate(nextPost.diaryDate)}
+                </span>
+                <span>→</span>
+              </Link>
+            ) : (
+              <div />
+            )}
+          </div>
+        </nav>
       </article>
     </div>
   )

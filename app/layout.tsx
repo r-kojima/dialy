@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
-import { Noto_Sans_JP, Geist_Mono } from "next/font/google"
+import { Geist_Mono, Noto_Sans_JP } from "next/font/google"
 import "./globals.css"
-import { ThemeToggle } from "./components/theme-toggle"
 import { Toaster } from "sonner"
+import { ThemeToggle } from "./components/theme-toggle"
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans",
